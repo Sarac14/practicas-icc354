@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title th:text="${titulo}">No debe presentarse</title>
+    <link rel="stylesheet" href="/css/bootstrap.minNew.css">
+</head>
+
+<body>
+    <div class="container" style="position: absolute;left: 0;right: 0;top: 50%;transform: translateY(-50%);-ms-transform: translateY(-50%);-moz-transform: translateY(-50%);-webkit-transform: translateY(-50%);-o-transform: translateY(-50%);">
+        <div class="row d-flex d-xl-flex justify-content-center justify-content-xl-center">
+            <div class="col-sm-12 col-lg-10 col-xl-9 col-xxl-7 bg-white shadow-lg" style="border-radius: 5px;">
+                <div class="p-5">
+                    <div class="text-center">
+                        <h4 class="text-dark mb-4">Nuevo Estudiante</h4>
+                    </div>
+                    <form th:action="@{/thymeleaf/guardarEstudiante}" th:object="${estudiante}" method="post">
+                        <input type="hidden" th:field="*{id}" />
+
+                        <div class="mb-3"><input class="form-control form-control-user" type="text" id="matricula" name="matricula" placeholder="Matricula" required="" th:value="${estudiante} ? ${estudiante.matricula} : ''"></div>
+                        <div class="mb-3"></div>
+
+                        <div class="mb-3"><input class="form-control form-control-user" type="text" id="nombre" name="nombre" placeholder="Nombre" required="" th:value="${estudiante} ? ${estudiante.nombre} : ''"></div>
+                        <div class="mb-3"></div>
+
+                        <div class="mb-3"><input class="form-control form-control-user" type="text" id="telefono" name="telefono" placeholder="Telefono" th:value="${estudiante} ? ${estudiante.telefono} : ''"></div>
+                        <div class="mb-3"></div>
+
+                        <button class="btn btn-primary d-block btn-user w-100" id="submitBtn" type="submit" th:text="${boton}">aqui va el boton</button>
+                        <hr>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/bootstrap.minNew.js"></script>
+</body>
+
+</html>
