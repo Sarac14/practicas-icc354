@@ -1,6 +1,7 @@
 package com.example.springbootclonemocky.config;
 
 import com.example.springbootclonemocky.servicios.SeguridadServices;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,15 +16,20 @@ import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+import javax.sql.DataSource;
+
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final SeguridadServices seguridadServices;
-    private final PasswordEncoder passwordEncoder;
 
-    public SecurityConfig(SeguridadServices seguridadServices, PasswordEncoder passwordEncoder) {
+    private DataSource dataSource;
+    private  SeguridadServices seguridadServices;
+    private  PasswordEncoder passwordEncoder;
+
+    public SecurityConfig(DataSource dataSource, SeguridadServices seguridadServices, PasswordEncoder passwordEncoder) {
+        this.dataSource = dataSource;
         this.seguridadServices = seguridadServices;
         this.passwordEncoder = passwordEncoder;
 
@@ -50,19 +56,32 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
-        http.authorizeHttpRequests(authorization ->
+
+       /* http.authorizeRequests()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/user/register")).permitAll()
+                .requestMatchers(AntPathRequestMatcher.antMatcher("/user/listarUsuarios")).permitAll();
+        /*http.authorizeHttpRequests(authorization ->
+                authorization
+                        .requestMatchers("/user/login", "/user/register").permitAll()
+                        .anyRequest().authenticated()
+        );*/
+
+       http.authorizeHttpRequests(authorization ->
                         authorization
                                 .requestMatchers(mvc.pattern("/")).permitAll()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/css/**"), AntPathRequestMatcher.antMatcher("/js/**"), AntPathRequestMatcher.antMatcher("/webjars/**"), AntPathRequestMatcher.antMatcher("*.html")).permitAll()
-                                .requestMatchers(mvc.pattern("/h2-console/**")).permitAll()
+                                //.requestMatchers(mvc.pattern("/h2-console/**")).permitAll()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api-docs/**"), AntPathRequestMatcher.antMatcher("/api-docs.yaml"), AntPathRequestMatcher.antMatcher("/swagger-ui.html"), AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api/mockendpoints/**")).authenticated()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/admin/")).hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
+                        .loginPage("/user/login")
                         .failureUrl("/login?error")
+                        .defaultSuccessUrl("/")
                         .permitAll()
                 )
                 .logout((logout) -> logout

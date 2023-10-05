@@ -1,9 +1,9 @@
 package com.example.springbootclonemocky.servicios;
 
 import com.example.springbootclonemocky.entidades.MockEndpoint;
-import com.example.springbootclonemocky.entidades.User;
-import com.example.springbootclonemocky.repositorio.MockEndpointRepository;
-import com.example.springbootclonemocky.repositorio.UserRepository;
+import com.example.springbootclonemocky.entidades.Usuario;
+import com.example.springbootclonemocky.repositorio.seguridad.MockEndpointRepository;
+import com.example.springbootclonemocky.repositorio.seguridad.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,11 +19,13 @@ public class MockEndpointService {
     private MockEndpointRepository mockEndpointRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UsuarioRepository userRepository;
 
     public List<MockEndpoint> findAllByCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsername(auth.getName()).orElse(null);
+        //Usuario user = userRepository.findByUsername(auth.getName()).orElse(null);
+        Usuario user = userRepository.findByUsername(auth.getName());
+
         if(user == null) {
             throw new RuntimeException("Usuario no encontrado");
         }

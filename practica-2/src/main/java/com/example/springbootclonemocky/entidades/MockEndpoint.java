@@ -12,7 +12,7 @@ public class MockEndpoint implements Serializable {
      private String method;
      @ManyToOne
      @JoinColumn(name="user_id")
-     private User user;
+     private Usuario user;
 
      public Long getId() {
          return id;
@@ -38,11 +38,11 @@ public class MockEndpoint implements Serializable {
          this.method = method;
      }
 
-     public User getUser() {
+     public Usuario getUser() {
          return user;
      }
 
-     public void setUser(User user) {
+     public void setUser(Usuario user) {
          this.user = user;
      }
  }

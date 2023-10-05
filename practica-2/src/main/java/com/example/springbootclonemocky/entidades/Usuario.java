@@ -7,7 +7,8 @@ import java.util.Set;
 
 
 @Entity
-public class User implements Serializable {
+@Table(name = "Usuario")
+public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

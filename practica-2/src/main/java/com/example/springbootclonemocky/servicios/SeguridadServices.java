@@ -1,9 +1,11 @@
 package com.example.springbootclonemocky.servicios;
 
 import com.example.springbootclonemocky.entidades.Rol;
-import com.example.springbootclonemocky.entidades.User;
+import com.example.springbootclonemocky.entidades.Usuario;
 import com.example.springbootclonemocky.repositorio.RolRepository;
-import com.example.springbootclonemocky.repositorio.UserRepository;
+import com.example.springbootclonemocky.repositorio.seguridad.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,12 +19,14 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@Qualifier
 public class SeguridadServices implements UserDetailsService  {
-    private UserRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
     private RolRepository rolRepository;
     private PasswordEncoder passwordEncoder;
 
-    public SeguridadServices(UserRepository usuarioRepository, RolRepository rolRepository) {
+    //@Autowired
+    public SeguridadServices(UsuarioRepository usuarioRepository, RolRepository rolRepository) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
     }
@@ -33,18 +37,18 @@ public class SeguridadServices implements UserDetailsService  {
         return passwordEncoder;
     }
 
-    public void crearUsuarios(){
+   public void crearUsuarios(){
         System.out.println("Creación del usuario y rol en la base de datos");
-        Rol rolAdmin = new Rol("ROLE_ADMIN");
-        //Rol rolUsuario = new Rol("ROLE_USER");
-        rolRepository.save(rolAdmin);
+       // Rol rolAdmin = new Rol("ROLE_ADMIN");
+       // Rol rolUsuario = new Rol("ROLE_USER");
+        //rolRepository.save(rolRepository.findByRole("ROLE_ADMIN"));
 
-        User admin = new User();
+        Usuario admin = new Usuario();
         admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("admin"));
        // admin.setNombre("Administrador");
         //admin.setActivo(true);
-        admin.setRoles(new HashSet<>(Arrays.asList(rolAdmin)));
+        admin.setRoles(new HashSet<>(Arrays.asList(rolRepository.findByRole("ROLE_ADMIN"))));
         usuarioRepository.save(admin);
 
        /* Usuario user = new Usuario();
@@ -56,10 +60,14 @@ public class SeguridadServices implements UserDetailsService  {
         usuarioRepository.save(user);*/
     }
 
+
+
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("Autenticación JPA");
-        User user = usuarioRepository.findByUsuario(username);
+        Usuario user = usuarioRepository.findByUsername(username);
         if(user==null){
             throw new UsernameNotFoundException("Usuario no existe.");
         }
