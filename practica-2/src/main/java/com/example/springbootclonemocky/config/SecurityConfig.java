@@ -26,6 +26,7 @@ public class SecurityConfig {
     public SecurityConfig(SeguridadServices seguridadServices, PasswordEncoder passwordEncoder) {
         this.seguridadServices = seguridadServices;
         this.passwordEncoder = passwordEncoder;
+
     }
 
     @Bean
