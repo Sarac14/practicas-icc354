@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>formulario</title>
+    <link rel="stylesheet" href="/../css/bootstrap.form.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-md fixed-top navbar-light" id="mainNav" style="background-color: #0085a1">
+        <div class="container"><a class="navbar-brand" href="#">Brand</a><button data-bs-toggle="collapse" class="navbar-toggler navbar-toggler-right" data-bs-target="#navbarResponsive" type="button" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" value="Menu"><i class="fa fa-bars"></i></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item nav-link"><a class="nav-link active" href="/">Inicio</a></li>
+                    <li class="nav-item nav-link"><a class="nav-link" href="#">Mock</a></li>
+                    <li class="nav-item nav-link"><a class="nav-link" href="/user/listarUsuarios">Usuarios</a></li>
+                    <li class="nav-item nav-link"><a class="nav-link" href="/user/login">LogIn</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form style="padding-top: 70px;">
+                    <div class="form-group mb-3">
+                        <h1 class="text-center">Crea tu Mock</h1>
+                    </div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="text" style="width: 50%;margin-left: 25%;" required="" placeholder="Ruta end-point"></div>
+<!--
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Metodo acceso"></div>
+-->
+                    <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
+                        <p>Metodo de acceso:</p>
+                        <select class="form-control form-control-lg" name="metodo_acceso">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="PATCH">PATCH</option>
+                            <option value="DELETE">DELETE</option>
+                            <option value="OPTIONS">OPTIONS</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
+                        <p>Content-type:</p>
+                        <select class="form-control form-control-lg" name="Content-type">
+                            <option value="applicatio/json">applicatio/json</option>
+                            <option value="applicatio/xml">applicatio/xml</option>
+                            <option value="text/xml">text/xml</option>
+                            <option value="text/json">text/json</option>
+                            <option value="text/plain">applicatio/plain</option>
+                        </select>
+                    </div>
+
+<!--
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="HTTP Status"></div>
+-->
+
+                    <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
+                        <p>HTTP Status:</p>
+                        <select class="form-control form-control-lg" name="numero_seleccionado">
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3"><textarea class="form-control form-control-lg" style="width: 50%;margin-left: 25%;min-height: 200px;" placeholder="Headers"></textarea></div>
+                    <div class="form-group mb-3"><textarea class="form-control form-control-lg" style="width: 50%;margin-left: 25%;min-height: 200px;" placeholder="Body"></textarea></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Nombre end-point"></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Descripcion"></div>
+
+                    <!--<div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Tiempo de expiracion"></div>-->
+
+                    <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
+                        <p>Tiempo de expieracion:</p>
+                        <select class="form-control form-control-lg" name="expiracion">
+                            <option value="none">None</option>
+                            <option value="mes">1 mes</option>
+                            <option value="semana">1 semana</option>
+                            <option value="dia">1 dia</option>
+                            <option value="hora">1 hora</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Demora de respuesta en segundos"></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Token secreto"></div>
+
+
+            <div class="form-group mb-3"><button class="btn btn-dark btn-lg" style="width: 50%;margin-left: 25%;" type="submit">Generar</button></div>
+                </form>
+                <div class="shadow" style="width: 100%;min-height: 630px;margin-top: 119px;background-color: rgba(255,255,255,0.79);"></div>
+            </div>
+        </div>
+    </div>
+    <script src="/../js/bootstrap.min.js"></script>
+    <script>
+        const dropdown = document.querySelector("select[name='numero_seleccionado']");
+        for(let i = 100; i <= 510; i++){
+            const option = document.createElement("option");
+            option.value = i;
+            option.textContent = i;
+            dropdown.appendChild(option);
+        }
+    </script>
+</body>
+
+</html>
