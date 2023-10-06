@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -15,27 +15,26 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item nav-link"><a class="nav-link active" href="/">Inicio</a></li>
-                    <li class="nav-item nav-link"><a class="nav-link" href="#">Mock</a></li>
+                    <li class="nav-item nav-link"><a class="nav-link" href="/mockendpoints/listarMock">Mock</a></li>
                     <li class="nav-item nav-link"><a class="nav-link" href="/user/listarUsuarios">Usuarios</a></li>
                     <li class="nav-item nav-link"><a class="nav-link" href="/user/login">LogIn</a></li>
                 </ul>
             </div>
         </div>
     </nav>
+    <br>
     <div class="container">
         <div class="row">
             <div class="col">
-                <form style="padding-top: 70px;">
+                <form style="padding-top: 70px;"  th:action="@{/mockendpoints/create}" method="post">
                     <div class="form-group mb-3">
                         <h1 class="text-center">Crea tu Mock</h1>
                     </div>
-                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="text" style="width: 50%;margin-left: 25%;" required="" placeholder="Ruta end-point"></div>
-<!--
-                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Metodo acceso"></div>
--->
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="text" style="width: 50%;margin-left: 25%;" required="" placeholder="Ruta end-point" name="endpointPath"></div>
+
                     <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
                         <p>Metodo de acceso:</p>
-                        <select class="form-control form-control-lg" name="metodo_acceso">
+                        <select class="form-control form-control-lg" name="method">
                             <option value="GET">GET</option>
                             <option value="POST">POST</option>
                             <option value="PUT">PUT</option>
@@ -47,7 +46,7 @@
 
                     <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
                         <p>Content-type:</p>
-                        <select class="form-control form-control-lg" name="Content-type">
+                        <select class="form-control form-control-lg" name="contentType">
                             <option value="applicatio/json">applicatio/json</option>
                             <option value="applicatio/xml">applicatio/xml</option>
                             <option value="text/xml">text/xml</option>
@@ -56,47 +55,58 @@
                         </select>
                     </div>
 
-<!--
-                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="HTTP Status"></div>
--->
 
                     <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
                         <p>HTTP Status:</p>
-                        <select class="form-control form-control-lg" name="numero_seleccionado">
+                        <select class="form-control form-control-lg" name="responseCode" >
                         </select>
                     </div>
 
-                    <div class="form-group mb-3"><textarea class="form-control form-control-lg" style="width: 50%;margin-left: 25%;min-height: 200px;" placeholder="Headers"></textarea></div>
-                    <div class="form-group mb-3"><textarea class="form-control form-control-lg" style="width: 50%;margin-left: 25%;min-height: 200px;" placeholder="Body"></textarea></div>
-                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Nombre end-point"></div>
-                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Descripcion"></div>
+                    <!--<div class="form-group mb-3"><textarea class="form-control form-control-lg" style="width: 50%;margin-left: 25%;min-height: 200px;" placeholder="Headers
 
-                    <!--<div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Tiempo de expiracion"></div>-->
+Hola: Mundo
+Spring: Boot" name="headers"></textarea></div>-->
+
+                    <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
+                        <p>Headers:</p>
+                        <div class="header-inputs">
+                            <div class="header-group">
+                                <input type="text" placeholder="Key" name="headerKeys" class="form-control form-control-lg">
+                                <input type="text" placeholder="Value" name="headerValues" class="form-control form-control-lg">
+                            </div>
+                        </div>
+                        <button type="button" onclick="addHeaderField()">Add Header</button>
+                    </div>
+
+
+                    <div class="form-group mb-3"><textarea class="form-control form-control-lg" style="width: 50%;margin-left: 25%;min-height: 200px;" placeholder="Body" name="responseBody"></textarea></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg"  style="width: 50%;margin-left: 25%;" placeholder="Nombre end-point" name="endpointName"></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg"  style="width: 50%;margin-left: 25%;" placeholder="Descripcion" name="description"></div>
+
 
                     <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
                         <p>Tiempo de expieracion:</p>
-                        <select class="form-control form-control-lg" name="expiracion">
-                            <option value="none">None</option>
-                            <option value="mes">1 mes</option>
-                            <option value="semana">1 semana</option>
-                            <option value="dia">1 dia</option>
-                            <option value="hora">1 hora</option>
+                        <select class="form-control form-control-lg" name="expirationTime">
+                            <option value="0">None</option>
+                            <option value="30">1 mes</option>
+                            <option value="7">1 semana</option>
+                            <option value="1">1 dia</option>
+                            <option value="0.041">1 hora</option>
                         </select>
                     </div>
 
-                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Demora de respuesta en segundos"></div>
-                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="email" style="width: 50%;margin-left: 25%;" placeholder="Token secreto"></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="number" style="width: 50%;margin-left: 25%;" placeholder="Demora de respuesta en segundos" name="responseDelay"></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" style="width: 50%;margin-left: 25%;" placeholder="Token secreto" name="secretToken"></div>
 
 
             <div class="form-group mb-3"><button class="btn btn-dark btn-lg" style="width: 50%;margin-left: 25%;" type="submit">Generar</button></div>
                 </form>
-                <div class="shadow" style="width: 100%;min-height: 630px;margin-top: 119px;background-color: rgba(255,255,255,0.79);"></div>
             </div>
         </div>
     </div>
     <script src="/../js/bootstrap.min.js"></script>
     <script>
-        const dropdown = document.querySelector("select[name='numero_seleccionado']");
+        const dropdown = document.querySelector("select[name='responseCode']");
         for(let i = 100; i <= 510; i++){
             const option = document.createElement("option");
             option.value = i;
@@ -104,6 +114,31 @@
             dropdown.appendChild(option);
         }
     </script>
+
+<script>
+    function addHeaderField() {
+        const headerInputs = document.querySelector('.header-inputs');
+        const newInputGroup = document.createElement('div');
+        newInputGroup.classList.add('header-group');
+
+        const newKeyInput = document.createElement('input');
+        newKeyInput.type = 'text';
+        newKeyInput.placeholder = 'Key';
+        newKeyInput.name = 'headerKeys[]';
+        newKeyInput.className = 'form-control form-control-lg';
+
+        const newValueInput = document.createElement('input');
+        newValueInput.type = 'text';
+        newValueInput.placeholder = 'Value';
+        newValueInput.name = 'headerValues[]';
+        newValueInput.className = 'form-control form-control-lg';
+
+        newInputGroup.appendChild(newKeyInput);
+        newInputGroup.appendChild(newValueInput);
+        headerInputs.appendChild(newInputGroup);
+    }
+
+</script>
 </body>
 
 </html>

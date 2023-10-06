@@ -37,5 +37,13 @@ public class MockEndpointService {
         }
     }
 
-    //otros metodos del CRUD
+    public void saveMock(MockEndpoint mockEndpoint) {
+        mockEndpointRepository.save(mockEndpoint);
+    }
+
+
+    /*public MockEndpoint findByPathAndMethod(String path, String method) {
+        return mockEndpointRepository.findByPathAndMethod(path,method);
+    }*/
+  
 }
