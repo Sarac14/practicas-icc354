@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,8 +38,28 @@ public class MockEndpointService {
         }
     }
 
+    @Transactional
     public void saveMock(MockEndpoint mockEndpoint) {
         mockEndpointRepository.save(mockEndpoint);
+        System.out.println("-----------------------SE GUARDO-------------------------");
+    }
+
+    public List<MockEndpoint> findAll() {
+       return mockEndpointRepository.findAll();
+    }
+
+    public MockEndpoint findByPathAndMethod(String path, String method) {
+        return mockEndpointRepository.findByPathAndMethod(path,method);
+    }
+
+
+
+   /* public MockEndpoint findByUniqueId(String id) {
+        return mockEndpointRepository.findByUniqueId(id);
+    }*/
+
+    public MockEndpoint findByUrl(String s) {
+        return mockEndpointRepository.findByUrl(s);
     }
 
 

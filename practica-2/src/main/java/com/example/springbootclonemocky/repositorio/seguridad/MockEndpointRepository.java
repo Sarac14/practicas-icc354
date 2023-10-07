@@ -18,5 +18,9 @@ public interface MockEndpointRepository extends JpaRepository<MockEndpoint, Long
     @Query("select m from MockEndpoint m where m.endpointPath = ?1 and m.method = ?2")
     MockEndpoint findByPathAndMethod(String path, String method);
 
+    MockEndpoint findByUrl(String s);
+
+   // MockEndpoint findByUniqueId(String id);
+
     //MockEndpoint findByPathAndMethod(String path, String method);
 }

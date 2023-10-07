@@ -51,7 +51,7 @@ public class UserController {
     public String listarEstudiantes(Model model) {
         List<Usuario> listaUsuarios = userService.listarUsuarios();
         model.addAttribute("lista", listaUsuarios);
-        return "formulario";
+        return "listarUsuarios";
     }
 
 }

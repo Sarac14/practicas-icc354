@@ -24,7 +24,7 @@ public class MockEndpointContoller {
     //Poner si es el admin que sean todos los mocks creados
     @GetMapping("/listarMock")
     public String getAllMockEndpointsForUser(Model model) {
-        List<MockEndpoint> mockEndpoints = mockEndpointService.findAllByCurrentUser();
+        List<MockEndpoint> mockEndpoints = mockEndpointService.findAll();
         model.addAttribute("lista", mockEndpoints);
         return "listaMocks";
     }
@@ -40,9 +40,8 @@ public class MockEndpointContoller {
                                      @ModelAttribute MockEndpoint mockEndpoint,
                                      @RequestParam List<String> headerKeys,
                                      @RequestParam List<String> headerValues,
-                                     Double expirationTime) {
-
-        String currentUrl = request.getRequestURI();
+                                     Double expirationTime,
+                                     Model model) {
 
         Map<String, String> headersMap = new HashMap<>();
         int size = Math.min(headerKeys.size(), headerValues.size());
@@ -54,44 +53,21 @@ public class MockEndpointContoller {
         double expirationHoursDouble = expirationTime * 24;
         int expirationHours = (int) Math.round(expirationHoursDouble);
         mockEndpoint.setExpirationTime(expirationHours);
-        mockEndpoint.setUrl(currentUrl);
+
+
+        String uniqueId = UUID.randomUUID().toString();
+        mockEndpoint.setUrl("/mocked/" + uniqueId);
+
 
         mockEndpointService.saveMock(mockEndpoint);
-        return "redirect:/mockendpoints/listarMock";
+
+        return "redirect:/mockendpoints/display/" + uniqueId;
     }
 
-
-
-    @RequestMapping("/**")
-    public ResponseEntity<String> serveMock(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        String method = request.getMethod();
-
-        MockEndpoint mockEndpoint = mockEndpointRepository.findByPathAndMethod(path, method);
-        if (mockEndpoint == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        Map<String, String> headersMap = mockEndpoint.getHeaders();
-        for (Map.Entry<String, String> entry : headersMap.entrySet()) {
-            responseHeaders.set(entry.getKey(), entry.getValue());
-        }
-
-        if (mockEndpoint.getResponseDelay() != null && mockEndpoint.getResponseDelay() > 0) {
-            try {
-                Thread.sleep(mockEndpoint.getResponseDelay() * 1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-
-        return ResponseEntity.status(mockEndpoint.getResponseCode())
-                .headers(responseHeaders)
-                .contentType(MediaType.parseMediaType(mockEndpoint.getContentType()))
-                .body(mockEndpoint.getResponseBody());
+    @GetMapping("/display/{uuid}")
+    public String displayMock(@PathVariable String uuid, Model model) {
+        MockEndpoint mockEndpoint = mockEndpointRepository.findByUrl("/mocked/" + uuid);
+        model.addAttribute("mockEndpoint", mockEndpoint);
+        return "displayMock";
     }
-
-
-
 }
