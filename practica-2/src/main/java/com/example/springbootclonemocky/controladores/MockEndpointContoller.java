@@ -1,13 +1,19 @@
 package com.example.springbootclonemocky.controladores;
 
+import com.example.springbootclonemocky.config.SecurityConfig;
 import com.example.springbootclonemocky.entidades.MockEndpoint;
+import com.example.springbootclonemocky.entidades.Rol;
+import com.example.springbootclonemocky.entidades.Usuario;
 import com.example.springbootclonemocky.repositorio.seguridad.MockEndpointRepository;
 import com.example.springbootclonemocky.servicios.MockEndpointService;
+import com.example.springbootclonemocky.servicios.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +27,24 @@ public class MockEndpointContoller {
     private MockEndpointService mockEndpointService;
     @Autowired
     private MockEndpointRepository mockEndpointRepository;
-    //Poner si es el admin que sean todos los mocks creados
+    @Autowired
+    private SecurityConfig securityConfig;
+    @Autowired
+    private UserService userService;
     @GetMapping("/listarMock")
     public String getAllMockEndpointsForUser(Model model) {
-        List<MockEndpoint> mockEndpoints = mockEndpointService.findAll();
+        List<MockEndpoint> mockEndpoints = mockEndpointService.findAllByCurrentUser();
         model.addAttribute("lista", mockEndpoints);
+        String username = securityConfig.getLoggedInUserDetails().getUsername();
+        Usuario currentUser = userService.findByUsername(username);
+
+
+        Set<Rol> roles = currentUser.getRoles();
+
+        for(Rol role : roles) {
+            System.out.println("-----------------------"+role.getRole()+"-----------------------");
+        }
+
         return "listaMocks";
     }
 
@@ -54,20 +73,24 @@ public class MockEndpointContoller {
         int expirationHours = (int) Math.round(expirationHoursDouble);
         mockEndpoint.setExpirationTime(expirationHours);
 
+        String username = securityConfig.getLoggedInUserDetails().getUsername();
+        Usuario currentUser = userService.findByUsername(username);
+        mockEndpoint.setUser(currentUser);
 
         String uniqueId = UUID.randomUUID().toString();
+        mockEndpoint.setUrl("/mocked/" + uniqueId);
         mockEndpoint.setUrl("/mocked/" + uniqueId);
 
 
         mockEndpointService.saveMock(mockEndpoint);
 
-        return "redirect:/mockendpoints/display/" + uniqueId;
+        return "redirect:/mockendpoints/listarMock";
     }
 
-    @GetMapping("/display/{uuid}")
+    /*@GetMapping("/display/{uuid}")
     public String displayMock(@PathVariable String uuid, Model model) {
         MockEndpoint mockEndpoint = mockEndpointRepository.findByUrl("/mocked/" + uuid);
         model.addAttribute("mockEndpoint", mockEndpoint);
         return "displayMock";
-    }
+    }*/
 }

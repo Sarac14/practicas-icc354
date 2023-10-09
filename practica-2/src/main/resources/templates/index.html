@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-bs-theme="light" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -19,7 +19,7 @@
                     <li class="nav-item nav-link"><a class="nav-link active" href="/">Inicio</a></li>
                     <li class="nav-item nav-link"><a class="nav-link" href="/mockendpoints/listarMock">Mock</a></li>
                     <li class="nav-item nav-link"><a class="nav-link" href="/user/listarUsuarios">Usuarios</a></li>
-                    <li class="nav-item nav-link"><a class="nav-link" href="/user/login">LogIn</a></li>
+                    <li class="nav-item nav-link"><a class="nav-link" th:href="${usuarioLog} == null ? '/user/login' : '/user/logout'" th:text="${usuarioLog} == null ? 'LogIN' : 'LogOut'">mmm</a></li>
                 </ul>
             </div>
         </div>

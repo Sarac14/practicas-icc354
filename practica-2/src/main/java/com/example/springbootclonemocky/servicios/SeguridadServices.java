@@ -37,26 +37,31 @@ public class SeguridadServices implements UserDetailsService  {
         return passwordEncoder;
     }
 
-   public void crearUsuarios(){
+    public void crearUsuarios(){
+
         System.out.println("Creación del usuario y rol en la base de datos");
-       // Rol rolAdmin = new Rol("ROLE_ADMIN");
-       // Rol rolUsuario = new Rol("ROLE_USER");
-        //rolRepository.save(rolRepository.findByRole("ROLE_ADMIN"));
+
+
+        Rol rolAdmin = new Rol("ROLE_ADMIN");
+        //rolRepository.save(rolAdmin);
+
+       Rol rolUsuario = new Rol("ROLE_USER");
+        //rolRepository.save(rolUsuario);
+
+
 
         Usuario admin = new Usuario();
         admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("admin"));
-       // admin.setNombre("Administrador");
-        //admin.setActivo(true);
-        admin.setRoles(new HashSet<>(Arrays.asList(rolRepository.findByRole("ROLE_ADMIN"))));
+        admin.setRoles(new HashSet<>(Arrays.asList(rolAdmin)));
         usuarioRepository.save(admin);
 
-       /* Usuario user = new Usuario();
+        /*Usuario user = new Usuario();
         user.setUsername("user");
         user.setPassword(passwordEncoder.encode("user"));
         user.setNombre("Usuario");
         user.setActivo(true);
-        user.setRoles(new HashSet<>(Arrays.asList(rolUsuario)));
+        user.setRols(new HashSet<>(Arrays.asList(rolUsuario)));
         usuarioRepository.save(user);*/
     }
 

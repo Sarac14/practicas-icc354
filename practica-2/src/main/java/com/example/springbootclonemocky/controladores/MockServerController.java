@@ -3,6 +3,8 @@ package com.example.springbootclonemocky.controladores;
 import com.example.springbootclonemocky.entidades.MockEndpoint;
 import com.example.springbootclonemocky.servicios.MockEndpointService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,20 +19,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping
 public class MockServerController {
 
     @Autowired
     private MockEndpointService mockEndpointService;
 
+    private static final Logger logger = LoggerFactory.getLogger(MockServerController.class);
+
+
     @RequestMapping("/mocked/{id}")
     public ResponseEntity<String> serveMockedEndpoint(@PathVariable String id) {
+        logger.info("Entrando a serveMockedEndpoint con id: " + id);
+
         MockEndpoint mockEndpoint = mockEndpointService.findByUrl("/mocked/" + id);
         if (mockEndpoint == null) {
             return ResponseEntity.notFound().build();
         }
 
+        logger.info("MockEndpoint encontrado: " + mockEndpoint.toString());  // Asegúrate de que MockEndpoint tenga un método toString() adecuado
+
+         MediaType temp = null;
+         if(mockEndpoint.getContentType().equals("text/plain")){
+             temp = MediaType.TEXT_PLAIN;
+         } else if(mockEndpoint.getContentType().equals("application/json")){
+            temp = MediaType.APPLICATION_JSON;
+        } else if(mockEndpoint.getContentType().equals("application/xml")){
+            temp = MediaType.APPLICATION_XML;
+        } else if(mockEndpoint.getContentType().equals("text/html")){
+            temp = MediaType.TEXT_HTML;
+        }
         HttpHeaders responseHeaders = new HttpHeaders();
         Map<String, String> headersMap = mockEndpoint.getHeaders();
         for (Map.Entry<String, String> entry : headersMap.entrySet()) {
@@ -45,9 +64,12 @@ public class MockServerController {
             }
         }
 
-        return ResponseEntity.status(mockEndpoint.getResponseCode())
+
+        logger.info("Devolviendo respuesta con código: " + mockEndpoint.getResponseCode());
+        return ResponseEntity
+                .status(mockEndpoint.getResponseCode())
                 .headers(responseHeaders)
-                .contentType(MediaType.parseMediaType(mockEndpoint.getContentType()))
+                .contentType(temp)
                 .body(mockEndpoint.getResponseBody());
     }
 

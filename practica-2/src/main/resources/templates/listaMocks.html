@@ -21,7 +21,7 @@
                     <li class="nav-item nav-link"><a class="nav-link active" href="/">Inicio</a></li>
                     <li class="nav-item nav-link"><a class="nav-link" href="/mockendpoints/listarMock">Mock</a></li>
                     <li class="nav-item nav-link"><a class="nav-link" href="/user/listarUsuarios">Usuarios</a></li>
-                    <li class="nav-item nav-link"><a class="nav-link" href="/user/login">LogIn</a></li>
+                   <!-- <li class="nav-item nav-link"><a class="nav-link" href="/user/login">LogIn</a></li>-->
                 </ul>
             </div>
         </div>
@@ -56,7 +56,7 @@
                                     <th class="text-center">Http Status</th>
                                     <th class="text-center">Content-Type</th>
                                     <th class="text-center">URL</th>
-
+                                    <th class="text-center">Usuario</th>
 
                                 </tr>
                             </thead>
@@ -64,9 +64,12 @@
                                 <tr th:each="mock : ${lista}">
                                     <td th:text="${mock.endpointName}">Ana</td>
                                     <td th:text="${mock.endpointPath}">Diseñador</td>
+                                    <td th:text="${mock.method}">Diseñador</td>
                                     <td th:text="${mock.responseCode}">Diseñador</td>
                                     <td th:text="${mock.contentType}">Diseñador</td>
                                     <td th:text="${mock.url}">Diseñador</td>
+                                    <td th:text="${mock.user.username}">Diseñador</td>
+
 
 
                                     <!--<td class="text-center align-middle" style="max-height: 60px;height: 60px;">
