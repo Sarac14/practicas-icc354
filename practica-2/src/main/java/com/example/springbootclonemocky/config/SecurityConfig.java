@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.*;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import javax.sql.DataSource;
@@ -71,7 +70,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
         );*/
 
-       http.authorizeHttpRequests(authorization ->
+    /*   http.authorizeHttpRequests(authorization ->
                        authorization
                                .requestMatchers(mvc.pattern("/")).permitAll()
                                .requestMatchers(AntPathRequestMatcher.antMatcher("/css/**"), AntPathRequestMatcher.antMatcher("/js/**"), AntPathRequestMatcher.antMatcher("/webjars/**"), AntPathRequestMatcher.antMatcher("*.html")).permitAll()
@@ -96,7 +95,7 @@ public class SecurityConfig {
                        .logoutRequestMatcher(AntPathRequestMatcher.antMatcher("/user/logout"))
                        .deleteCookies("JSESSIONID")
                        .permitAll());
-
+*/
 
         return http.build();
     }

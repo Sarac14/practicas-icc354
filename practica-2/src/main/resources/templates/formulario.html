@@ -30,10 +30,10 @@
                     <div class="form-group mb-3">
                         <h1 class="text-center">Crea tu Mock</h1>
                     </div>
-                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="text" style="width: 50%;margin-left: 25%;" required="" placeholder="Ruta end-point" name="endpointPath"></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="text" style="width: 50%;margin-left: 25%;" required="" th:placeholder="#{form.label.endpointPath}" name="endpointPath"></div>
 
                     <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
-                        <p>Metodo de acceso:</p>
+                        <p th:text="#{form.label.method}">Metodo de acceso:</p>
                         <select class="form-control form-control-lg" name="method">
                             <option value="GET">GET</option>
                             <option value="POST">POST</option>
@@ -58,7 +58,7 @@
 
 
                     <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
-                        <p>HTTP Status:</p>
+                        <p th:text="#{form.label.responseCode}">HTTP Status:</p>
                         <select class="form-control form-control-lg" name="responseCode" >
                         </select>
                     </div>
@@ -69,7 +69,8 @@ Hola: Mundo
 Spring: Boot" name="headers"></textarea></div>-->
 
                     <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
-                        <p>Headers:</p>
+                        <span th:text="${currentLocale}"></span>
+                        <p th:text="#{form.label.headers}">Headers:</p>
                         <div class="header-inputs">
                             <div class="header-group">
                                 <input type="text" placeholder="Key" name="headerKeys" class="form-control form-control-lg">
@@ -80,13 +81,13 @@ Spring: Boot" name="headers"></textarea></div>-->
                     </div>
 
 
-                    <div class="form-group mb-3"><textarea class="form-control form-control-lg" style="width: 50%;margin-left: 25%;min-height: 200px;" placeholder="Body" name="responseBody"></textarea></div>
-                    <div class="form-group mb-3"><input class="form-control form-control-lg"  style="width: 50%;margin-left: 25%;" placeholder="Nombre end-point" name="endpointName"></div>
-                    <div class="form-group mb-3"><input class="form-control form-control-lg"  style="width: 50%;margin-left: 25%;" placeholder="Descripcion" name="description"></div>
+                    <div class="form-group mb-3"><textarea class="form-control form-control-lg" style="width: 50%;margin-left: 25%;min-height: 200px;" th:placeholder="#{form.label.responseBody}" name="responseBody" ></textarea></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg"  style="width: 50%;margin-left: 25%;" th:placeholder="#{form.label.endpointName}" name="endpointName"></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg"  style="width: 50%;margin-left: 25%;" th:placeholder="#{form.label.description}" name="description"></div>
 
 
                     <div class="form-group mb-3" style="width: 50%; margin-left: 25%;">
-                        <p>Tiempo de expieracion:</p>
+                        <p th:text="#{form.label.expirationTime}">Tiempo de expieracion:</p>
                         <select class="form-control form-control-lg" name="expirationTime">
                             <option value="0">None</option>
                             <option value="30">1 mes</option>
@@ -96,11 +97,11 @@ Spring: Boot" name="headers"></textarea></div>-->
                         </select>
                     </div>
 
-                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="number" style="width: 50%;margin-left: 25%;" placeholder="Demora de respuesta en segundos" name="responseDelay"></div>
-                    <div class="form-group mb-3"><input class="form-control form-control-lg" style="width: 50%;margin-left: 25%;" placeholder="Token secreto" name="secretToken"></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" type="number" style="width: 50%;margin-left: 25%;" th:placeholder="#{form.label.responseDelay}" name="responseDelay"></div>
+                    <div class="form-group mb-3"><input class="form-control form-control-lg" style="width: 50%;margin-left: 25%;" th:placeholder="#{form.label.secretToken}" name="secretToken"></div>
 
 
-            <div class="form-group mb-3"><button class="btn btn-dark btn-lg" style="width: 50%;margin-left: 25%;" type="submit">Generar</button></div>
+            <div class="form-group mb-3"><button class="btn btn-dark btn-lg" style="width: 50%;margin-left: 25%;" type="submit" th:text="#{form.button.generate}">Generar</button></div>
                 </form>
             </div>
         </div>

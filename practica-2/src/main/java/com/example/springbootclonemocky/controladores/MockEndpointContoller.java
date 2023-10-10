@@ -49,9 +49,11 @@ public class MockEndpointContoller {
     }
 
     @GetMapping("/create")
-    public String createMockEndpoint(Model model) {
+    public String createMockEndpoint(Model model, Locale locale) {
         model.addAttribute("titulo", "Crear Nuevo Mock");
         model.addAttribute("mock", new MockEndpoint());
+        model.addAttribute("currentLocale", locale);
+
         return "formulario";
     }
     @PostMapping("/create")
