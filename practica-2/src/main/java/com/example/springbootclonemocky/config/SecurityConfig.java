@@ -70,7 +70,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
         );*/
 
-    /*   http.authorizeHttpRequests(authorization ->
+     http.authorizeHttpRequests(authorization ->
                        authorization
                                .requestMatchers(mvc.pattern("/")).permitAll()
                                .requestMatchers(AntPathRequestMatcher.antMatcher("/css/**"), AntPathRequestMatcher.antMatcher("/js/**"), AntPathRequestMatcher.antMatcher("/webjars/**"), AntPathRequestMatcher.antMatcher("*.html")).permitAll()
@@ -95,7 +95,7 @@ public class SecurityConfig {
                        .logoutRequestMatcher(AntPathRequestMatcher.antMatcher("/user/logout"))
                        .deleteCookies("JSESSIONID")
                        .permitAll());
-*/
+
 
         return http.build();
     }
