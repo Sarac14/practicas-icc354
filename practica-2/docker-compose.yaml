@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    image: smct0001/docker-compose:latest
+    build: .
+    ports:
+      - "${PUERTO_APP:-8080}:8080"
+    environment:
+      DB_HOST: h2db
+      DB_PORT: 9092
+      DB_NAME: test
+      DB_USERNAME: sa
+      DB_PASSWORD:
+    networks:
+      - red-app
+    depends_on:
+      - h2db
+
+  h2db:
+    image: oscarfonts/h2
+    ports:
+      - "9092:9092"
+    volumes:
+      - h2-data:/h2-data
+    environment:
+      H2_OPTIONS: "-tcp -tcpAllowOthers -tcpPort 9092 -ifNotExists"
+    networks:
+      - red-app
+
+networks:
+  red-app:
+
+volumes:
+  h2-data:
