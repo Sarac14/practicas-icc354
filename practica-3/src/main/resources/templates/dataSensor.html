@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualización de Datos de Sensores</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+<canvas id="temperatura-chart" width="400" height="200"></canvas>
+<canvas id="humedad-chart" width="400" height="200"></canvas>
+
+<script>
+    var temperaturaData = []; // Array para datos de temperatura
+    var humedadData = [];    // Array para datos de humedad
+
+    var temperaturaChart = new Chart(document.getElementById('temperatura-chart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Temperatura',
+                data: temperaturaData,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        }
+    });
+
+    var humedadChart = new Chart(document.getElementById('humedad-chart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Humedad',
+                data: humedadData,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        }
+    });
+
+    var socket = new SockJS('/ws'); // Conéctate al endpoint WebSocket configurado en Spring
+    var stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        stompClient.subscribe('/topic/sensores', function (response) {
+            var sensorData = JSON.parse(response.body);
+
+            // Agrega nuevos datos a los gráficos
+            temperaturaData.push(sensorData.temperatura);
+            humedadData.push(sensorData.humedad);
+
+            // Actualiza las etiquetas en el eje X con la fecha de generación
+            temperaturaChart.data.labels.push(sensorData.fechaGeneracion);
+            humedadChart.data.labels.push(sensorData.fechaGeneracion);
+
+            // Limita la cantidad de datos mostrados en los gráficos
+            if (temperaturaData.length > 10) {
+                temperaturaData.shift();
+                humedadData.shift();
+                temperaturaChart.data.labels.shift();
+                humedadChart.data.labels.shift();
+            }
+
+            // Actualiza los gráficos
+            temperaturaChart.update();
+            humedadChart.update();
+        });
+    });
+</script>
+</body>
+</html>
