@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @MessageMapping("/sensores")
 public class SensorDataController {
 
-    @Autowired
-    private SensorDataService sensorDataService;
 
     @GetMapping("/graficos")
     public String mostrarGraficos() {

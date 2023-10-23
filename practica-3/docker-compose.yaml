@@ -1,0 +1,31 @@
+version: '3'
+services:
+  activemq:
+    image: rmohr/activemq:latest
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+      - "61613:61613"
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: admin
+    volumes:
+      - ./activemq-data:/data
+
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - activemq
+
+  web-app:
+    build:
+      context: ./path/to/your/webapp
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - spring-app

@@ -22,15 +22,14 @@ public class EndpointClient {
         return new SensorData(
                 LocalDateTime.now().format(formatter),
                 deviceId,
-                (random.nextDouble() * 100),  // temperatura
-                (random.nextDouble() * 100)   // humedad
+                (random.nextDouble() * 100),
+                (random.nextDouble() * 100)
         );
     }
 
     public void enviarMensaje(int deviceId) {
         SensorData data = generateRandomData(deviceId);
 
-        // Convertir el objeto data a JSON y enviarlo
         jmsTemplate.convertAndSend("notificacion_sensores", data);
     }
 }

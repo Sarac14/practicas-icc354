@@ -11,7 +11,7 @@ public class SimulationService {
     @Autowired
     private EndpointClient client;
 
-    @Scheduled(fixedRate = 60000)  // cada minuto
+    @Scheduled(fixedRate = 60000)
     public void runSimulation() {
         // Simula el dispositivo 1
         client.enviarMensaje(1);
