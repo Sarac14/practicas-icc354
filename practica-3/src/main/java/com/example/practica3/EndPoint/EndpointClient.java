@@ -1,5 +1,6 @@
 package com.example.practica3.EndPoint;
 
+import com.example.practica3.Entidades.SensorData;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,43 +15,23 @@ public class EndpointClient {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    public void enviarMensaje() {
-        // Generar valores aleatorios de temperatura y humedad
-        String fechaGeneracion = obtenerFechaGeneracion(); // Implementa la lógica para obtener la fecha de generación
-        int idDispositivo = obtenerIdDispositivo(); // Implementa la lógica para obtener el ID del dispositivo
-        double temperatura = generarTemperaturaAleatoria(); // Implementa la lógica para generar la temperatura aleatoria
-        double humedad = generarHumedadAleatoria(); // Implementa la lógica para generar la humedad aleatoria
+    private Random random = new Random();
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-        // Crear la trama JSON
-        String jsonTrama = "{\"fechaGeneracion\": \"" + fechaGeneracion + "\", \"IdDispositivo\": " + idDispositivo +
-                ", \"temperatura\": " + temperatura + ", \"humedad\": " + humedad + "}";
-
-        // Enviar el mensaje a la cola de notificación
-        jmsTemplate.convertAndSend("notificacion_sensores", jsonTrama);
+    public SensorData generateRandomData(int deviceId) {
+        return new SensorData(
+                LocalDateTime.now().format(formatter),
+                deviceId,
+                (random.nextDouble() * 100),  // temperatura
+                (random.nextDouble() * 100)   // humedad
+        );
     }
 
-    // Métodos para la generación de datos aleatorios
-    private int obtenerIdDispositivo() {
-        Random random = new Random();
-        return random.nextInt(1000); // Genera un ID aleatorio en el rango de 0 a 999 (puedes ajustar el rango según tus necesidades)
-    }
-    private double generarTemperaturaAleatoria() {
-        // Genera un valor de temperatura aleatorio en el rango de 0 a 100 grados Celsius
-        Random random = new Random();
-        return random.nextDouble() * 100;
-    }
+    public void enviarMensaje(int deviceId) {
+        SensorData data = generateRandomData(deviceId);
 
-    // Método para generar humedad aleatoria
-    private double generarHumedadAleatoria() {
-        // Genera un valor de humedad aleatorio en el rango de 0 a 100 por ciento
-        Random random = new Random();
-        return random.nextDouble() * 100;
+        // Convertir el objeto data a JSON y enviarlo
+        jmsTemplate.convertAndSend("notificacion_sensores", data);
     }
-
-    private String obtenerFechaGeneracion() {
-        LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return myDateObj.format(myFormatObj);
-    }
-
 }
+

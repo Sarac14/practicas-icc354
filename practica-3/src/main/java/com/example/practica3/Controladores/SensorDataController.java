@@ -18,7 +18,13 @@ public class SensorDataController {
 
     @GetMapping("/graficos")
     public String mostrarGraficos() {
-        return "/sensores/dataSensor"; // Nombre de la vista de la página que muestra los gráficos
+        return "data";
+    }
+
+    @MessageMapping("/sensor-data")
+    @SendTo("/topic/sensor-data")
+    public SensorData sendSensorData(SensorData sensorData) {
+        return sensorData;
     }
 
 }

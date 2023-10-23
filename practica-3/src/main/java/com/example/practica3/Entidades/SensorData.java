@@ -7,7 +7,6 @@ public class SensorData {
     private double humedad;
 
     public SensorData() {
-        // Constructor vacío requerido para la deserialización JSON
     }
 
     public SensorData(String fechaGeneracion, int idDispositivo, double temperatura, double humedad) {
@@ -17,7 +16,6 @@ public class SensorData {
         this.humedad = humedad;
     }
 
-    // Agregar getters y setters para todos los campos
     public String getFechaGeneracion() {
         return fechaGeneracion;
     }

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Real-time Sensor Data</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+</head>
+<body>
+<canvas id="temperatureChart" width="400" height="200"></canvas>
+<canvas id="humidityChart" width="400" height="200"></canvas>
+
+<!-- Aquí irá el código JS para manejar WebSockets y actualizar los gráficos -->
+
+<script>
+  const ctxTemp = document.getElementById('temperatureChart').getContext('2d');
+  const ctxHumidity = document.getElementById('humidityChart').getContext('2d');
+  const temperatureData = [];
+  const humidityData = [];
+  const timeLabels = [];
+
+  // Crear gráficos iniciales
+  const temperatureChart = new Chart(ctxTemp, {
+    type: 'line',
+    data: {
+      labels: timeLabels,
+      datasets: [{
+        label: 'Temperatura',
+        data: temperatureData,
+        fill: false,
+        borderColor: 'red'
+      }]
+    }
+  });
+
+  const humidityChart = new Chart(ctxHumidity, {
+    type: 'line',
+    data: {
+      labels: timeLabels,
+      datasets: [{
+        label: 'Humedad',
+        data: humidityData,
+        fill: false,
+        borderColor: 'blue'
+      }]
+    }
+  });
+
+  // Establecer conexión WebSocket
+  const socket = new SockJS('http://localhost:8080/ws');
+  const stompClient = Stomp.over(socket);
+  stompClient.connect({}, function (frame) {
+    console.log('Connected: ' + frame);
+    stompClient.subscribe('/topic/sensor-data', function (sensorData) {
+      updateCharts(JSON.parse(sensorData.body));
+    });
+  });
+
+  function updateCharts(data) {
+    if (timeLabels.length > 20) {
+      timeLabels.shift();
+      temperatureData.shift();
+      humidityData.shift();
+    }
+
+    timeLabels.push(data.fechaGeneracion);
+    temperatureData.push(data.temperatura);
+    humidityData.push(data.humedad);
+
+    temperatureChart.update();
+    humidityChart.update();
+  }
+</script>
+
+</body>
+</html>
