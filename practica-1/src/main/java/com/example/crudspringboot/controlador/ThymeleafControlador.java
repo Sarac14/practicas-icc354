@@ -34,7 +34,7 @@ public class ThymeleafControlador {
         model.addAttribute("titulo", "Crear Nuevo Estudiante");
         model.addAttribute("boton", "Registrar");
         model.addAttribute("estudiante", new Estudiante());
-        return "/thymeleaf/NuevoEstudiante";
+        return "thymeleaf/NuevoEstudiante";
     }
 
     @GetMapping("/editarEstudiante/{id}")
@@ -43,7 +43,7 @@ public class ThymeleafControlador {
         model.addAttribute("titulo", "Editar Estudiante");
         model.addAttribute("boton", "Actualizar");
         model.addAttribute("estudiante", estudiante);
-        return "/thymeleaf/NuevoEstudiante";
+        return "thymeleaf/NuevoEstudiante";
     }
 
     @PostMapping("/guardarEstudiante")
