@@ -44,10 +44,14 @@ public class SeguridadServices implements UserDetailsService  {
 
         //Rol rolAdmin = new Rol("ROLE_ADMIN");
         Rol rolAdmin = rolRepository.findByRole("ROLE_ADMIN");
-        if (rolAdmin == null) {
+        /*if (rolAdmin == null) {
+            System.out.println("El rol 'ROLE_ADMIN' no existe. Creándolo...");
             rolAdmin = new Rol("ROLE_ADMIN");
             rolRepository.save(rolAdmin);
-        }
+        } else {
+            System.out.println("El rol 'ROLE_ADMIN' ya existe en la base de datos.");
+        }*/
+
         //rolRepository.save(rolAdmin);
 
        Rol rolUsuario = new Rol("ROLE_USER");
