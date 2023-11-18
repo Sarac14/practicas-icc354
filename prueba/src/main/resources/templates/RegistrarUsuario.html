@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title th:text="${titulo}">...</title>
+
+</head>
+
+<body>
+    <div class="container" style="position: absolute;left: 0;right: 0;top: 50%;transform: translateY(-50%);-ms-transform: translateY(-50%);-moz-transform: translateY(-50%);-webkit-transform: translateY(-50%);-o-transform: translateY(-50%);">
+        <div class="row d-flex d-xl-flex justify-content-center justify-content-xl-center">
+            <div class="col-sm-12 col-lg-10 col-xl-9 col-xxl-7 bg-white shadow-lg" style="border-radius: 5px;">
+                <div class="p-5">
+                    <div class="text-center">
+                        <h4 class="text-dark mb-4">¡Crea un nuevo usuario!</h4>
+                    </div>
+<!--
+                    <form class="user" action="/user/register" method="post">
+-->
+                        <form th:action="@{/user/register}" th:object="${usuario}" method="post">
+                            <input type="hidden" th:field="*{id}" />
+                        <div class="mb-3"><input th:value="${usuario} ? ${usuario.username} : ''" class="form-control form-control-user" type="text" placeholder="Username" name ="username" required=""></div>
+                        <div class="mb-3"></div>
+                        <div class="row mb-3">
+                            <div class="col-sm-6 mb-3 mb-sm-0"><input th:value="${usuario} ? ${usuario.password} : ''" class="form-control form-control-user" type="password" id="password" placeholder="Password" name="password"required=""></div>
+                            <div class="col-sm-6"><input th:value="${usuario} ? ${usuario.password} : ''" class="form-control form-control-user" type="password" id="verifyPassword" placeholder="Repeat Password" required=""></div>
+                        </div>
+                       <!-- <div class="row mb-3">
+                            <div class="col-sm-6 mb-3 mb-sm-0"><input th:value="${usuario} ? ${usuario.Nombre.split(' ')[0]} : ''" class="form-control form-control-user" type="text" placeholder="First Name" name="Fname"></div>
+                            <div class="col-sm-6"><input th:value="${usuario} ? ${usuario.Nombre.split(' ')[1]} : ''" class="form-control form-control-user" type="text" placeholder="Last Name" name="Lname"></div>
+                        </div>-->
+                        <div class="row mb-3">
+                            <p id="emailErrorMsg" class="text-danger" style="display: none;">Paragraph</p>
+                            <p id="passwordErrorMsg" class="text-danger" style="display: none;">Paragraph</p>
+                        </div><button class="btn btn-primary d-block btn-user w-100" id="submitBtn" type="submit">Crear cuenta</button>
+                        <hr>
+                    </form>
+
+                </div>
+            </div>
+        </div><script>
+	let password = document.getElementById("password")
+	let verifyPassword = document.getElementById("verifyPassword")
+	let submitBtn = document.getElementById("submitBtn")
+	let emailErrorMsg = document.getElementById('emailErrorMsg')
+	let passwordErrorMsg = document.getElementById('passwordErrorMsg')
+
+	/*function displayErrorMsg(type, msg) {
+		if(type == "email") {
+			emailErrorMsg.style.display = "block"
+			emailErrorMsg.innerHTML = msg
+			submitBtn.disabled = true
+		}
+		else {
+			passwordErrorMsg.style.display = "block"
+			passwordErrorMsg.innerHTML = msg
+			submitBtn.disabled = true
+		}
+	}
+
+	function hideErrorMsg(type) {
+		if(type == "email") {
+			emailErrorMsg.style.display = "none"
+			emailErrorMsg.innerHTML = ""
+			submitBtn.disabled = true
+			if(passwordErrorMsg.innerHTML == "")
+				submitBtn.disabled = false
+		}
+		else {
+			passwordErrorMsg.style.display = "none"
+			passwordErrorMsg.innerHTML = ""
+			if(emailErrorMsg.innerHTML == "")
+				submitBtn.disabled = false
+		}
+	}*/
+
+	// Validate password upon change
+	password.addEventListener("change", function() {
+
+		// If password has no value, then it won't be changed and no error will be displayed
+		if(password.value.length == 0 && verifyPassword.value.length == 0) hideErrorMsg("password")
+		
+		// If password has a value, then it will be checked. In this case the passwords don't match
+		else if(password.value !== verifyPassword.value) displayErrorMsg("password", "Passwords do not match")
+		
+		// When the passwords match, we check the length
+		else {
+			// Check if the password has 8 characters or more
+			if(password.value.length >= 8)
+				hideErrorMsg("password")
+			else
+				displayErrorMsg("password", "Password must be at least 8 characters long")
+		}
+	})
+	
+	verifyPassword.addEventListener("change", function() {
+		if(password.value !== verifyPassword.value)
+			displayErrorMsg("password", "Passwords do not match")
+		else {
+			// Check if the password has 8 characters or more
+			if(password.value.length >= 8)
+				hideErrorMsg("password")
+			else
+				displayErrorMsg("password", "Password must be at least 8 characters long")
+		}
+	})
+
+
+</script>
+    </div>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+
+</html>
