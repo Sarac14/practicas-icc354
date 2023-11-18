@@ -29,8 +29,8 @@ public class UserController {
     @Autowired
     private SecurityConfig securityConfig;
 
-    @Value("${server.port}")
-    private int puerto;
+
+    private int puerto = 8080;
 
     @GetMapping("/")
     public String redireccion() {
