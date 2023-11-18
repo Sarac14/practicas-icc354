@@ -28,8 +28,7 @@ public class UserController {
     @Autowired
     private SecurityConfig securityConfig;
 
-    @Autowired
-    Enviroment enviroment;
+
 
     @GetMapping("/")
     public String redireccion() {
@@ -73,7 +72,7 @@ public class UserController {
             return "redirect:/user/listarUsuarios";
         }*/
         model.addAttribute("titulo", "login");
-        model.addAttribute("puerto", environment.getProperty("local.server.port"));
+        model.addAttribute("puerto", System.getProperty("server.port"));
 
         return "login";
     }
