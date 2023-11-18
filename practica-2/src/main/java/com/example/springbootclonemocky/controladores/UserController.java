@@ -2,6 +2,7 @@ package com.example.springbootclonemocky.controladores;
 
 import com.example.springbootclonemocky.config.SecurityConfig;
 import com.example.springbootclonemocky.entidades.Rol;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -27,6 +28,9 @@ public class UserController {
 
     @Autowired
     private SecurityConfig securityConfig;
+
+    @Value("${server.port}")
+    private int puerto;
 
     @GetMapping("/")
     public String redireccion() {
@@ -72,6 +76,7 @@ public class UserController {
             return "redirect:/user/listarUsuarios";
         }*/
         model.addAttribute("titulo", "login");
+        model.addAttribute("puerto", puerto);
         return "login";
     }
 
