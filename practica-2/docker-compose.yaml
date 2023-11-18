@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: smct0001/balanceadores:latest
+    image: smct0001/docker-compose:latest
     build: .
     ports:
       - "${PUERTO_APP:-8080}:8080"
