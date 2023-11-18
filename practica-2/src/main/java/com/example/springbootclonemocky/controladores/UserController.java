@@ -37,6 +37,8 @@ public class UserController {
     public String inicio (Model model) {
        // model.addAttribute("titulo", "Crear Nuevo Usuario");
        model.addAttribute("usuarioLog", securityConfig.getLoggedInUserDetails());
+        model.addAttribute("puerto", System.getProperty("server.port"));
+
 
         return "index";
     }
