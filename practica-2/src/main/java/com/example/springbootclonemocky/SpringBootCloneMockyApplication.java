@@ -1,6 +1,7 @@
 package com.example.springbootclonemocky;
 
 import com.example.springbootclonemocky.servicios.SeguridadServices;
+import com.example.springbootclonemocky.servicios.UserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -14,9 +15,9 @@ public class SpringBootCloneMockyApplication {
 
 
         ApplicationContext applicationContext = SpringApplication.run(SpringBootCloneMockyApplication.class, args);
+        UserService usuarioService = (UserService) applicationContext.getBean("userService");
+        usuarioService.initializeUsuario();
 
-        SeguridadServices seguridadServices = (SeguridadServices) applicationContext.getBean("seguridadServices");
-        seguridadServices.crearUsuarios();
 
     }
 

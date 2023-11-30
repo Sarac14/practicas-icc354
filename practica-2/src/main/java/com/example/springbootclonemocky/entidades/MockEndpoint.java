@@ -1,162 +1,164 @@
 package com.example.springbootclonemocky.entidades;
 
+import com.example.springbootclonemocky.servicios.JWTService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Set;
 
 @Entity
-public class MockEndpoint implements Serializable {
-     @Id
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private Long id;
-     private String endpointPath;
-     private String method;
+@Table(name = "Mocky")
+public class MockEndpoint {
 
-     private Integer responseCode;
-     private String contentType;
-     private String responseBody;
-     private String endpointName;
-     private String description;
-     private Integer expirationTime;
-     private Integer responseDelay;
-     private String secretToken;
 
-     /*@OneToMany(mappedBy="mockEndpoint", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-     private Set<HttpHeader> headers;*/
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    @Column(length = 10000)
+    private String nombre;
+    private String descripcion;
+    private String responseCode;
+    private String method;
+    private String contentType;
+    @Lob
     private String headers;
+    @Lob
+    private String responseBody;
+    @DateTimeFormat
+    private LocalDateTime expirationTime;
+    private int responseDelay;
 
-    private String url;
-     @ManyToOne
-     @JoinColumn(name="user_id")
-     private Usuario user;
+    private String codigo;
 
-     public Long getId() {
-         return id;
-     }
+    private boolean seguridad;
 
-     public void setId(Long id) {
-         this.id = id;
-     }
+    @ManyToOne
+    Usuario user;
 
-     public String getEndpointPath() {
-         return endpointPath;
-     }
+    public MockEndpoint(){}
 
-     public void setEndpointPath(String endpointPath) {
-         this.endpointPath = endpointPath;
-     }
+    public MockEndpoint(String nombre, String descripcion, String responseCode, String method, String contentType, String headers, String responseBody, LocalDateTime expirationTime, int responseDelay, String codigo, boolean seguridad, Usuario user) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.responseCode = responseCode;
+        this.method = method;
+        this.contentType = contentType;
+        this.headers = headers;
+        this.responseBody = responseBody;
+        this.expirationTime = expirationTime;
+        this.responseDelay = responseDelay;
+        this.codigo = codigo;
+        this.user = user;
 
-     public String getMethod() {
-         return method;
-     }
-
-     public void setMethod(String method) {
-         this.method = method;
-     }
-
-     public Usuario getUser() {
-         return user;
-     }
-
-     public void setUser(Usuario user) {
-         this.user = user;
-     }
+        this.seguridad = seguridad;
 
 
-
-     public Integer getResponseCode() {
-         return responseCode;
-     }
-
-     public void setResponseCode(Integer responseCode) {
-         this.responseCode = responseCode;
-     }
-
-     public String getContentType() {
-         return contentType;
-     }
-
-     public void setContentType(String contentType) {
-         this.contentType = contentType;
-     }
-
-     public String getResponseBody() {
-         return responseBody;
-     }
-
-     public void setResponseBody(String responseBody) {
-         this.responseBody = responseBody;
-     }
-
-     public String getEndpointName() {
-         return endpointName;
-     }
-
-     public void setEndpointName(String endpointName) {
-         this.endpointName = endpointName;
-     }
-
-     public String getDescription() {
-         return description;
-     }
-
-     public void setDescription(String description) {
-         this.description = description;
-     }
-
-     public Integer getExpirationTime() {
-         return expirationTime;
-     }
-
-     public void setExpirationTime(Integer expirationTime) {
-         this.expirationTime = expirationTime;
-     }
-
-     public Integer getResponseDelay() {
-         return responseDelay;
-     }
-
-     public void setResponseDelay(Integer responseDelay) {
-         this.responseDelay = responseDelay;
-     }
-
-     public String getSecretToken() {
-         return secretToken;
-     }
-
-     public void setSecretToken(String secretToken) {
-         this.secretToken = secretToken;
-     }
-
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    public Map<String, String> getHeaders() {
-        try {
-            return objectMapper.readValue(headers, Map.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error deserializando los headers", e);
-        }
+    }
+    public boolean isSeguridad() {
+        return seguridad;
     }
 
-    public void setHeaders(Map<String, String> headers) {
-        try {
-            this.headers = objectMapper.writeValueAsString(headers);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error serializando los headers", e);
-        }
+    public void setSeguridad(boolean seguridad) {
+        this.seguridad = seguridad;
+    }
+    public String getCodigo() {
+        return codigo;
     }
 
-    public String getUrl() {
-        return url;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public String getNombre() {
+        return nombre;
     }
+
+    public void setNombre(String endpointName) {
+        this.nombre = endpointName;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String status) {
+        this.responseCode = status;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String metodo) {
+        this.method = metodo;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String content) {
+        this.contentType = content;
+    }
+
+    public String getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(String headers) {
+        this.headers = headers;
+    }
+
+    public String getResponseBody() {
+        return responseBody;
+    }
+
+    public void setResponseBody(String body) {
+        this.responseBody = body;
+    }
+
+    public LocalDateTime getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(LocalDateTime exp) {
+        this.expirationTime = exp;
+    }
+
+    public int getResponseDelay() {
+        return responseDelay;
+    }
+
+    public void setResponseDelay(int demora) {
+        this.responseDelay = demora;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String expParseada(){
+        DateTimeFormatter nt = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy");
+        return this.expirationTime.format(nt);
+    }
+
+
 }

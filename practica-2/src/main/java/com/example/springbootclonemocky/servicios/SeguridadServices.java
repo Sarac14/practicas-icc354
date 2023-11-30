@@ -7,8 +7,10 @@ import com.example.springbootclonemocky.repositorio.seguridad.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,80 +21,44 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-@Qualifier
-public class SeguridadServices implements UserDetailsService  {
-    private UsuarioRepository usuarioRepository;
-    private RolRepository rolRepository;
-    private PasswordEncoder passwordEncoder;
+public class SeguridadServices implements UserDetailsService {
 
-    //@Autowired
-    public SeguridadServices(UsuarioRepository usuarioRepository, RolRepository rolRepository) {
-        this.usuarioRepository = usuarioRepository;
-        this.rolRepository = rolRepository;
+    @Autowired
+    UserService usuarioService;
+
+    public SeguridadServices() {
     }
-
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        passwordEncoder = Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
-        return passwordEncoder;
-    }
-
-    public void crearUsuarios(){
-
-        System.out.println("Creación del usuario y rol en la base de datos");
-
-
-        //Rol rolAdmin = new Rol("ROLE_ADMIN");
-        Rol rolAdmin = rolRepository.findByRole("ROLE_ADMIN");
-        /*if (rolAdmin == null) {
-            System.out.println("El rol 'ROLE_ADMIN' no existe. Creándolo...");
-            rolAdmin = new Rol("ROLE_ADMIN");
-            rolRepository.save(rolAdmin);
-        } else {
-            System.out.println("El rol 'ROLE_ADMIN' ya existe en la base de datos.");
-        }*/
-
-        //rolRepository.save(rolAdmin);
-
-       Rol rolUsuario = new Rol("ROLE_USER");
-        //rolRepository.save(rolUsuario);
-
-
-
-        Usuario admin = new Usuario();
-        admin.setUsername("admin");
-        admin.setPassword(passwordEncoder.encode("admin"));
-        admin.setRoles(new HashSet<>(Arrays.asList(rolAdmin)));
-        usuarioRepository.save(admin);
-
-        /*Usuario user = new Usuario();
-        user.setUsername("user");
-        user.setPassword(passwordEncoder.encode("user"));
-        user.setNombre("Usuario");
-        user.setActivo(true);
-        user.setRols(new HashSet<>(Arrays.asList(rolUsuario)));
-        usuarioRepository.save(user);*/
-    }
-
-
-
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         System.out.println("Autenticación JPA");
-        Usuario user = usuarioRepository.findByUsername(username);
-        if(user==null){
+        Usuario user = usuarioService.findByUsername(username);
+
+        if (user == null){
             throw new UsernameNotFoundException("Usuario no existe.");
         }
 
-        Set<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
-        for (Rol role : user.getRoles()) {
-            roles.add(new SimpleGrantedAuthority(role.getRole()));
+        System.out.print("Trying to authenticate: " + username + ", Roles: ");
+
+        Set<GrantedAuthority> rols = new HashSet<>();
+        for (Rol rol : user.getRols()){
+            rols.add(new SimpleGrantedAuthority(rol.getRole()));
+            System.out.print(rol.getRole() + " ");
         }
+        System.out.println();
 
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>(roles);
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>(rols);
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), true, true, true, true, grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(), user.getPassword(), true, true, true, true, grantedAuthorities);
+    }
+
+    public Usuario getAuthorizedUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null){
+            return null;
+        }
+        return usuarioService.findByUsername(auth.getName());
     }
 }

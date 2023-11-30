@@ -28,12 +28,10 @@ import javax.sql.DataSource;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private DataSource dataSource;
-    private  SeguridadServices seguridadServices;
+    private SeguridadServices seguridadServices;
     private  PasswordEncoder passwordEncoder;
 
-    public SecurityConfig(DataSource dataSource, SeguridadServices seguridadServices, PasswordEncoder passwordEncoder) {
-        this.dataSource = dataSource;
+    public SecurityConfig(SeguridadServices seguridadServices, PasswordEncoder passwordEncoder) {
         this.seguridadServices = seguridadServices;
         this.passwordEncoder = passwordEncoder;
 
@@ -61,40 +59,45 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
 
-       /* http.authorizeRequests()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/user/register")).permitAll()
-                .requestMatchers(AntPathRequestMatcher.antMatcher("/user/listarUsuarios")).permitAll();
-        /*http.authorizeHttpRequests(authorization ->
-                authorization
-                        .requestMatchers("/user/login", "/user/register").permitAll()
-                        .anyRequest().authenticated()
-        );*/
+        http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**"))
+                        .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/mockendpoints/**"))
+                        .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/mockendpoints/editar/**"))
+                        .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/mockendpoints/modificar/**"))
+                        .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/mockendpoints/eliminar/**"))
+                        .ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/api/**")))
 
-     http.authorizeHttpRequests(authorization ->
-                       authorization
-                               .requestMatchers(mvc.pattern("/")).permitAll()
-                               .requestMatchers(AntPathRequestMatcher.antMatcher("/css/**"), AntPathRequestMatcher.antMatcher("/js/**"), AntPathRequestMatcher.antMatcher("/webjars/**"), AntPathRequestMatcher.antMatcher("*.html")).permitAll()
-                               //.requestMatchers(mvc.pattern("/h2-console/**")).permitAll()
-                               .requestMatchers(AntPathRequestMatcher.antMatcher("/api-docs/**"), AntPathRequestMatcher.antMatcher("/api-docs.yaml"), AntPathRequestMatcher.antMatcher("/swagger-ui.html"), AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
-                               .requestMatchers(AntPathRequestMatcher.antMatcher("/mockendpoints/**")).authenticated()
-                               .requestMatchers(AntPathRequestMatcher.antMatcher("/admin/")).hasAnyRole("ADMIN", "USER")
-                               .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**")).hasAnyRole("ADMIN")
-                               .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-                               .anyRequest().authenticated()
-               )
+                .authorizeHttpRequests(authorization ->
+                        authorization
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api")).hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(mvc.pattern("/user/listarUsuarios")).hasAnyRole("ADMIN")
+                                .requestMatchers(mvc.pattern("/")).permitAll()
+                                .requestMatchers(mvc.pattern("/mockendpoints/editar/**")).hasAnyRole("ADMIN","USER")
 
-               .formLogin((form) -> form
-                       .loginPage("/user/login")
-                       .failureUrl("/login?error")
-                       .defaultSuccessUrl("/")
-                       .permitAll()
-               )
-               .logout((logout) -> logout
-                       .logoutSuccessUrl("/")
-                       .invalidateHttpSession(true)
-                       .logoutRequestMatcher(AntPathRequestMatcher.antMatcher("/user/logout"))
-                       .deleteCookies("JSESSIONID")
-                       .permitAll());
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/css/**"), AntPathRequestMatcher.antMatcher("/js/**"), AntPathRequestMatcher.antMatcher("/webjars/**"), AntPathRequestMatcher.antMatcher("*.html")).permitAll()
+                                //.requestMatchers(mvc.pattern("/h2-console/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api-docs/**"), AntPathRequestMatcher.antMatcher("/api-docs.yaml"), AntPathRequestMatcher.antMatcher("/swagger-ui.html"), AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/mockendpoints/**")).hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/admin/")).hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/user/**")).hasAnyRole("ADMIN")
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+                                .anyRequest().authenticated()
+                )
+
+                .formLogin((form) -> form
+                        .loginPage("/user/login")
+                        .failureUrl("/login?error")
+                        .defaultSuccessUrl("/")
+                        .permitAll()
+                )
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .logoutRequestMatcher(AntPathRequestMatcher.antMatcher("/user/logout"))
+                        .deleteCookies("JSESSIONID")
+                        .permitAll());
 
 
         return http.build();

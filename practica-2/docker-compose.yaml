@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    image: smct0001/docker-compose:latest
+    image: smct0001/docker-compose2:latest
     build: .
     ports:
       - "${PUERTO_APP:-8080}:8080"
@@ -33,3 +33,5 @@ networks:
 
 volumes:
   h2-data:
+
+

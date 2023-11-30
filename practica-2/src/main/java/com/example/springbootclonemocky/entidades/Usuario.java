@@ -3,28 +3,22 @@ package com.example.springbootclonemocky.entidades;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 
 @Entity
 @Table(name = "Usuario")
 public class Usuario implements Serializable {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String username;
     private String password;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private
-    Set<Rol> roles;
+//    private Boolean activo;
+    private String nombre;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private List<Rol> rols;
 
     public String getUsername() {
         return username;
@@ -42,11 +36,27 @@ public class Usuario implements Serializable {
         this.password = password;
     }
 
-    public Set<Rol> getRoles() {
-        return roles;
+//    public Boolean isActivo() {
+//        return activo;
+//    }
+
+//    public void setActivo(Boolean activo) {
+//        this.activo = activo;
+//    }
+
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setRoles(Set<Rol> roles) {
-        this.roles = roles;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public List<Rol> getRols() {
+        return rols;
+    }
+
+    public void setRols(List<Rol> rols) {
+        this.rols = rols;
     }
 }

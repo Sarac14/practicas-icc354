@@ -7,20 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
-@Repository
 public interface MockEndpointRepository extends JpaRepository<MockEndpoint, Long> {
-    @Query("select u from MockEndpoint u where u.id = ?1")
-    MockEndpoint consultaEndpoint(Long id);
-
+    List<MockEndpoint> findAll();
     List<MockEndpoint> findAllByUser(Usuario user);
+    void deleteById(Long id);
 
-    @Query("select m from MockEndpoint m where m.endpointPath = ?1 and m.method = ?2")
-    MockEndpoint findByPathAndMethod(String path, String method);
+    Optional<MockEndpoint> findByCodigoAndNombre(String codigo, String nombre);
 
-    MockEndpoint findByUrl(String s);
+    Optional<MockEndpoint> findById(Long id);
 
-   // MockEndpoint findByUniqueId(String id);
-
-    //MockEndpoint findByPathAndMethod(String path, String method);
 }
