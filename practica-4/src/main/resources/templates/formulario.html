@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="plantilla.html::head">
+    <title th:text="${titulo}">...</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+</head>
+<body >
+
+<div class="container mt-5 mx-auto">
+
+    <div class="form-group mb-3 text-center">
+        <h1 th:text="${titulo}">Crea tu Mock</h1>
+    </div>
+
+    <!-- El endpoint que estará procesando el formulario será enviado por el controlador      -->
+    <form enctype="application/x-www-form-urlencoded" method="post" th:attr="action=${accion}" class="my-4">
+        <div class="form-group">
+            <label for="status" th:text="#{statuscreate}"></label>
+            <select name="status" id="status" class="form-control" th:readonly="${visualizar}" >
+                <option th:each="status : ${listStatus}" th:value="${status}" th:text="${status}" th:selected="${status == selectstat }"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="metodo" th:text="#{metodocreate}"></label>
+            <select name="metodo" id="metodo" class="form-control" th:readonly="${visualizar}" >
+                <option th:each="met : ${metodo}" th:value="${met}" th:text="${met}"  th:selected="${met == selectmet}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="content" th:text="#{contentcreate}"></label>
+            <select name="content" id="content" class="form-control" >
+                <option th:each="con : ${content}" th:value="${con}" th:text="${con}"  th:selected="${con == conselect}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="nombre" th:text="#{nombrecreate}"></label>
+            <!--th:value="${est != null} ? ${est.nombre} : ''"-->
+            <input th:readonly="${visualizar}" th:value="${fname}" type="text"  name="nombre" class="form-control" id="nombre">
+        </div>
+        <div class="form-group">
+            <label for="desc" th:text="#{descripcioncreate}"> </label>
+            <!--<input th:readonly="${visualizar}" th:value="${est != null} ? ${est.nombre} : ''" type="text"  name="nombre" class="form-control" id="nombre">-->
+            <textarea class="form-control"  name="desc" id="desc" rows="3" th:text="${fdesc}"  th:readonly="${visualizar}" ></textarea>
+        </div>
+        <div class="form-group">
+            <label for="headers" th:text="#{headerscreate}"> </label>
+            <!-- La variable visualizar aplica el formulario readonly.                -->
+            <!--<input th:readonly="${visualizar}" th:value="${est != null} ? ${est.matricula} : ''" type="text" name="matricula" class="form-control" id="matricula" aria-describedby="username">-->
+            <textarea class="form-control"  name="headers" id="headers" rows="3" th:text="${fheaders}" th:placeholder="${headerplace}"  th:readonly="${visualizar}" ></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="body" th:text="#{bodycreate}"> </label>
+            <!--<input th:readonly="${visualizar}" th:value="${est != null} ? ${est.nombre} : ''" type="text"  name="nombre" class="form-control" id="nombre">-->
+            <textarea class="form-control"  name="body" id="body" rows="3" th:placeholder="${bodyplace}"  th:text="${fbody}" th:readonly="${visualizar}" ></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="exp" th:text="#{expcreate}">Expiracion</label>
+            <select name="exp" id="exp" class="form-control w-25" th:readonly="${visualizar}" >
+                <option th:each="exp : ${listExp}" th:value="${exp}" th:text="'1 '+${exp}" th:selected="${exp == selectexp }"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="dem" th:text="#{demcreate}"></label>
+            <select name="dem" id="dem" class="form-control w-25" >
+                <option th:each="dem : ${listDem}" th:value="${dem}" th:text="${dem}+'s'" th:selected="${dem == selecdem }"></option>
+            </select>
+        </div>
+
+        <!--<div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="seguridadJwt" name="seguridadJwt" value="true">
+            <label class="form-check-label" for="seguridadJwt">Quieres agregar seguridad jwt?</label>
+        </div>-->
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="seguridadJwdt" name="seguridadJwt" value="true" onchange="updateHiddenField(this)">
+            <input type="hidden" id="hiddenSeguridadJwt" name="seguridadJwt" value="false">
+            <label class="form-check-label" for="seguridadJwdt" th:text="#{jwtcreate}"></label>
+        </div>
+
+        <script>
+            function updateHiddenField(checkboxElem) {
+                document.getElementById('hiddenSeguridadJwt').value = checkboxElem.checked ? 'true' : 'false';
+            }
+        </script>
+
+        <!-- Los botones para la creación del estudiante -->
+        <button th:if="${!visualizar}" type="submit" class="btn btn-primary" th:text="#{tipo}">.</button>
+        <a href="/mockendpoints/" class="btn btn-primary" th:text="#{salircreate}"></a>
+    </form>
+</div>
+
+<!-- incluyendo la parte de javascript del template.        -->
+<div th:replace="plantilla.html::javascript">
+
+</div>
+
+</body>
+
+</html>
