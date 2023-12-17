@@ -15,7 +15,7 @@
                     <div class="text-center">
                         <h4 class="text-dark mb-4">Nuevo Estudiante</h4>
                     </div>
-                    <form th:action="@{/thymeleaf/guardarEstudiante}" th:object="${estudiante}" method="post">
+                    <form th:action="@{/guardarEstudiante}" th:object="${estudiante}" method="post">
                         <input type="hidden" th:field="*{id}" />
 
                         <div class="mb-3"><input class="form-control form-control-user" type="text" id="matricula" name="matricula" placeholder="Matricula" required="" th:value="${estudiante} ? ${estudiante.matricula} : ''"></div>

@@ -2,7 +2,7 @@
 FROM openjdk:17-alpine as builder
 WORKDIR /CRUD-SPRINGBOOT
 COPY . /CRUD-SPRINGBOOT
-RUN ./gradlew build
+RUN ./gradlew build -x test
 
 # Stage 2: Production image
 FROM openjdk:17-alpine

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller()
-@RequestMapping(path = "/thymeleaf")
+@RequestMapping(path = "/")
 public class ThymeleafControlador {
 
     @Autowired
@@ -22,11 +22,14 @@ public class ThymeleafControlador {
         model.addAttribute("lista", listaDeEstudiantes);
         return "thymeleaf/index";
     }
-
+    @GetMapping("/")
+    public String inicio() {
+        return "redirect:/listarEstudiantes";
+    }
     @GetMapping("/borrarEstudiante/{id}")
     public String borrarEstudiante(@PathVariable Long id) {
         estudianteServicio.eliminarEstudiante(id);
-        return "redirect:/thymeleaf/listarEstudiantes";
+        return "redirect:/listarEstudiantes";
     }
 
     @GetMapping("/nuevoEstudiante")
@@ -53,6 +56,6 @@ public class ThymeleafControlador {
         } else {
             estudianteServicio.modificarEstudiante(estudiante.getId(), estudiante);
         }
-        return "redirect:/thymeleaf/listarEstudiantes";
+        return "redirect:/listarEstudiantes";
     }
 }
