@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Lista Estudiantes</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/css/theme.bootstrap_4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" href="/css/Ludens---1-Index-Table-with-Search--Sort-Filters-v20.css">
+
+</head>
+
+<body>
+<nav class="navbar navbar-expand-md fixed-top navbar-light" id="mainNav" style="background-color: #0085a1">
+    <div class="container"><a class="navbar-brand" href="#">Brand</a><button data-bs-toggle="collapse" class="navbar-toggler navbar-toggler-right" data-bs-target="#navbarResponsive" type="button" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" value="Menu"><i class="fa fa-bars"></i></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item nav-link"><a class="nav-link active" href="/">Inicio</a></li>
+                <li class="nav-item nav-link"><a class="nav-link" href="/mockendpoints/listarMock">Mock</a></li>
+                <li class="nav-item nav-link"><a class="nav-link" href="/user/listarUsuarios">Usuarios</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<br>
+<br>
+<br>
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-12 col-sm-6 col-md-6 offset-lg-6 text-end" style="margin-bottom: 30px;"><a class="btn btn-primary" role="button" th:href="@{/mockendpoints/crear}"><i class="fa fa-plus"></i>&nbsp;Nuevo Mock</a></div>
+
+    </div>
+    <div class="card" id="TableSorterCard">
+        <div class="card-header py-3">
+            <div class="row table-topper align-items-center">
+                <div class="col-12 col-sm-5 col-md-6 text-start" style="margin: 0px;padding: 5px 15px;">
+                    <p class="text-primary m-0 fw-bold">Mocks</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table tablesorter" id="ipi-table">
+                        <thead class="thead-dark">
+                        <tr>
+
+
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">url</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Metodo</th>
+                            <th scope="col">Http Status</th>
+                            <th scope="col">Content-Type</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        <tr th:each="mock : ${lista}">
+                            <td th:text="${mock.id}"></td>
+                            <td > <a th:text="'api/'+${mock.nombre}+'/'+${mock.codigo}+'?token'" th:href="${url}+${mock.nombre}+'/'+${mock.codigo}+'?token=' +${jwt.generateJwt(mock)}"/></td>
+                            <td th:text="${mock.nombre}"></td>
+                            <td th:text="${mock.method}"></td>
+                            <td th:text="${mock.responseCode}"></td>
+                            <td th:text="${mock.contentType}"></td>
+                            <td>
+                                <a th:text="Editar" th:href="'editar/'+${mock.id}" th class="btn btn-secondary btn-sm"/> |
+                                <a th:text="Eliminar" th:href="'eliminar/'+${mock.id}" th class="btn btn-danger btn-sm"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/jquery.tablesorter.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/widgets/widget-filter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.2/js/widgets/widget-storage.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="/js/Ludens---1-Index-Table-with-Search--Sort-Filters-v20-Ludens---1-Index-Table-with-Search--Sort-Filters.js"></script>
+<script src="/js/Ludens---1-Index-Table-with-Search--Sort-Filters-v20-Ludens---Material-UI-Actions.js"></script>
+</body>
+
+
+
+</html>
